@@ -21,13 +21,22 @@ class Webservice: NSObject {
                 
                 //Apply string encoding as response is not UTF 8 formatted
                 let string = String(decoding: data, as: UTF8.self)
+                
                 if let datastr = string.data(using: String.Encoding.utf8) {
                     //Map response data into model
                     do {
                         let countryData = try JSONDecoder().decode(WeatherData.self, from: datastr)
                         completion(countryData, nil)
+                        print(countryData)
+                        
+                        let errors = try? JSONDecoder().decode(Errors.self, from: datastr)
+                        print("got error \(errors)")
+                        
                     } catch let error as NSError {
                         print(error)
+//                        if string[value(forKey: "cod")]{
+//                            print("city not found")
+//                        }
                         completion(nil, error)
                     }
                 }

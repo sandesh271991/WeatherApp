@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/Sandesh/Desktop/WeatherApp/WeatherApp/WeatherApps/Model/WeatherLocalData+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/Sandesh/Desktop/WeatherApp/WeatherApp/WeatherApps/Model/WeatherLocalData+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
       location = "group:WeatherApps.xcodeproj">
    </FileRef>
    <FileRef
