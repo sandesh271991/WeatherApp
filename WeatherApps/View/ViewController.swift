@@ -52,7 +52,12 @@ class ViewController: UIViewController, getCityDelegate {
         if let city  = txtNewCityAdded.text {
             newCityAdded = city
         }
-        self.fetchData()
+        
+        if cityList.contains(where: { ($0.cityName)?.caseInsensitiveCompare(newCityAdded!) == .orderedSame}) {
+            showAlert(title: "", message: "City Already added")
+        } else {
+            self.fetchData()
+        }
     }
     
     func getCity(cityName: String) {
@@ -61,29 +66,28 @@ class ViewController: UIViewController, getCityDelegate {
     }
     
     func updateView() {
-        print("City name = \(self.weatherViewModel?.name ?? "No name")")
-        print("Temp name = \(self.weatherViewModel?.temp.temp ?? 0.0)")
+        self.cityList = [AnyObject]()
         
-        // self.tableView?.reloadData()
+        DispatchQueue.main.async {
+            self.retrieveData()
+            self.tableView.reloadData()
+        }
     }
+    
     @objc func fetchData() {
         
         if isConnectedToInternet() == true {
             let webserviceURLNew = webserviceURL + "q=\(newCityAdded!)" + "&" + "appid=\(appid)"
             
             Webservice.shared.getData(with: webserviceURLNew) { (countryData, error) in
-             
+                
                 if error != nil {
-                    
                     return
                 }
                 guard let countryData = countryData else {return}
                 self.weatherData = countryData
                 self.createData()
-                DispatchQueue.main.async {
-                    self.retrieveData()
-                    self.tableView.reloadData()
-                }
+                
             }
         } else {
             showAlert(title: "No Internet Connection", message: "Please check your internet connection")
@@ -151,7 +155,7 @@ class ViewController: UIViewController, getCityDelegate {
 extension ViewController:  UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 5
+        return 1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -160,7 +164,7 @@ extension ViewController:  UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 5))
-        footerView.backgroundColor = UIColor.gray
+        footerView.backgroundColor = UIColor.black
         return footerView
     }
     
