@@ -79,13 +79,13 @@ class ViewController: UIViewController, getCityDelegate {
         if isConnectedToInternet() == true {
             let webserviceURLNew = webserviceURL + "q=\(newCityAdded!)" + "&" + "appid=\(appid)"
             
-            Webservice.shared.getData(with: webserviceURLNew) { (countryData, error) in
+            Webservice.shared.getData(with: webserviceURLNew) { (weatherData, error) in
                 
                 if error != nil {
                     return
                 }
-                guard let countryData = countryData else {return}
-                self.weatherData = countryData
+                guard let weatherData = weatherData else {return}
+                self.weatherData = weatherData
                 self.createData()
                 
             }
@@ -108,12 +108,9 @@ class ViewController: UIViewController, getCityDelegate {
         //final, we need to add some data to our newly created record for each keys using
         //here adding 5 data with loop
         
-        
-        
         let user = NSManagedObject(entity: userEntity, insertInto: managedContext)
         user.setValue( weatherViewModel?.name , forKeyPath: "cityName")
         user.setValue(weatherViewModel?.temp.temp, forKeyPath: "temp")
-        
         
         //Now we have set all the values. The next step is to save them inside the Core Data
         
@@ -147,6 +144,38 @@ class ViewController: UIViewController, getCityDelegate {
             }
         } catch {
             print("Failed")
+        }
+    }
+    
+    func deleteData(cityName:String){
+        
+        //As we know that container is set up in the AppDelegates so we need to refer that container.
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        //We need to create a context from this container
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "WeatherLocalData")
+        fetchRequest.predicate = NSPredicate(format: "cityName = %@", cityName )
+       
+        do
+        {
+            let test = try managedContext.fetch(fetchRequest)
+            
+            let objectToDelete = test[0] as! NSManagedObject
+            managedContext.delete(objectToDelete)
+            
+            do{
+                try managedContext.save()
+            }
+            catch
+            {
+                print(error)
+            }
+        }
+        catch
+        {
+            print(error)
         }
     }
 }
@@ -192,6 +221,13 @@ extension ViewController:  UITableViewDataSource, UITableViewDelegate {
         cityCell?.lblCityName.text = cityList[indexPath.row].cityName
         
         return cityCell!
+    }
+     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            deleteData(cityName: cityList[indexPath.row].cityName!)
+            cityList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
     }
 }
 

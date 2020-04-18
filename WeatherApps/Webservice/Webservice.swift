@@ -25,9 +25,9 @@ class Webservice: NSObject {
                 if let datastr = string.data(using: String.Encoding.utf8) {
                     //Map response data into model
                     do {
-                        let countryData = try JSONDecoder().decode(WeatherData.self, from: datastr)
-                        completion(countryData, nil)
-                        print(countryData)
+                        let weatherData = try JSONDecoder().decode(WeatherData.self, from: datastr)
+                        completion(weatherData, nil)
+                        print(weatherData)
                         
                         let errors = try? JSONDecoder().decode(Errors.self, from: datastr)
                         print("got error \(errors)")
