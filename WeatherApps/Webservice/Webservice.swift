@@ -29,9 +29,6 @@ class Webservice: NSObject {
                         completion(weatherData, nil)
                         print(weatherData)
                         
-                        let errors = try? JSONDecoder().decode(Errors.self, from: datastr)
-                        print("got error \(errors)")
-                        
                     } catch let error as NSError {
                         print(error)
 //                        if string[value(forKey: "cod")]{

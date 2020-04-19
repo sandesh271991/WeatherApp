@@ -11,9 +11,14 @@ import CoreData
 
 
 class ViewController: UIViewController, getCityDelegate {
-
+    
     var tempTypeCelcius: Bool =  true  // true = °C and false = °F
     @IBOutlet weak var txtNewCityAdded: UITextField!
+    @IBOutlet weak var lblTempType: UIButton!
+    
+    @IBOutlet weak var btnTempTypeCelcius: UIButton!
+    
+    @IBOutlet weak var btnTempTypeFahrenheit: UIButton!
     var cityList = [AnyObject]()
     var newCityAdded: String?
     var weatherViewModel: WeatherViewModel?
@@ -34,9 +39,9 @@ class ViewController: UIViewController, getCityDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        btnTempTypeCelcius.setTitleColor(.blue, for: .normal)
+        btnTempTypeFahrenheit.setTitleColor(.gray, for: .normal)
         self.retrieveData()
-        
-      var date =  createDateTime(timestamp: "3600")
     }
     
     //View LifeCycle
@@ -47,43 +52,32 @@ class ViewController: UIViewController, getCityDelegate {
     }
     
     @IBAction func btnAddCity(_ sender: Any) {
-
         
-         let presentedViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewCityVC") as! NewCityVC
+        let presentedViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewCityVC") as! NewCityVC
         
-            presentedViewController.delegate = self
-            presentedViewController.providesPresentationContextTransitionStyle = true
-            presentedViewController.definesPresentationContext = true
-            presentedViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
-            self.present(presentedViewController, animated: true, completion: nil)
-    
-
-             // self.presentModalViewController(myCamera, animated: true)
-        
-
+        presentedViewController.delegate = self
+        presentedViewController.providesPresentationContextTransitionStyle = true
+        presentedViewController.definesPresentationContext = true
+        presentedViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
+        self.present(presentedViewController, animated: true, completion: nil)
     }
     
     func getCity(cityName: String){
-             
-                    newCityAdded = cityName
-                
         
-                if cityList.contains(where: { ($0.cityName)?.caseInsensitiveCompare(newCityAdded!) == .orderedSame}) {
-                     DispatchQueue.main.async {
-                        self.showAlert(title: "", message: "City Already added")
-                    }
-                } else {
-                    self.fetchData()
-                }
+        newCityAdded = cityName
+        
+        if cityList.contains(where: { ($0.cityName)?.caseInsensitiveCompare(newCityAdded!) == .orderedSame}) {
+            DispatchQueue.main.async {
+                self.showAlert(title: "", message: "City Already added")
+            }
+        } else {
+            self.fetchData()
+        }
     }
-
-    func backFromCamera() {
-         print("Back from camera")
-     }
     
     func createDateTime(timestamp: String) -> String {
         var strDate = "undefined"
-            
+        
         if let unixTime = Double(timestamp) {
             let date = Date(timeIntervalSince1970: unixTime)
             let dateFormatter = DateFormatter()
@@ -93,7 +87,7 @@ class ViewController: UIViewController, getCityDelegate {
             dateFormatter.dateFormat = "dd.MM.yyyy HH:mm" //Specify your format that you want
             strDate = dateFormatter.string(from: date)
         }
-            
+        
         return strDate
     }
     
@@ -126,18 +120,21 @@ class ViewController: UIViewController, getCityDelegate {
         }
     }
     
-    @IBAction func btnTempTypeToggle(_ sender: Any) {
-        tempTypeCelcius.toggle()
-        
-        if tempTypeCelcius {
-            
-        }
-        else{
-            
-        }
+    @IBAction func btnTempTypeCelcius(_ sender: Any) {
+        tempTypeCelcius = true
+        btnTempTypeCelcius.setTitleColor(.blue, for: .normal)
+        btnTempTypeFahrenheit.setTitleColor(.gray, for: .normal)
         tableView.reloadData()
     }
-
+    
+    @IBAction func btnTempTypeFahrenheit(_ sender: Any) {
+        tempTypeCelcius = false
+        btnTempTypeCelcius.setTitleColor(.gray, for: .normal)
+        btnTempTypeFahrenheit.setTitleColor(.blue, for: .normal)
+        tableView.reloadData()
+    }
+    
+    
     func createData(){
         
         //As we know that container is set up in the AppDelegates so we need to refer that container.
@@ -154,7 +151,7 @@ class ViewController: UIViewController, getCityDelegate {
         user.setValue( weatherViewModel?.name , forKeyPath: "cityName")
         user.setValue(weatherViewModel?.temp.temp, forKeyPath: "temp")
         user.setValue(weatherViewModel?.time, forKeyPath: "timezone")
-
+        
         //Now we have set all the values. The next step is to save them inside the Core Data
         do {
             try managedContext.save()
@@ -199,7 +196,7 @@ class ViewController: UIViewController, getCityDelegate {
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "WeatherLocalData")
         fetchRequest.predicate = NSPredicate(format: "cityName = %@", cityName )
-       
+        
         do
         {
             let test = try managedContext.fetch(fetchRequest)
@@ -239,7 +236,6 @@ extension ViewController:  UITableViewDataSource, UITableViewDelegate {
         return footerView
     }
     
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -260,19 +256,15 @@ extension ViewController:  UITableViewDataSource, UITableViewDelegate {
             cityCell?.lblTemp.text = convertTemp(temp: Double(cityList[indexPath.row].temp), from: .kelvin, to: .celsius)
         }
         else{
-             cityCell?.lblTemp.text = convertTemp(temp: Double(cityList[indexPath.row].temp), from: .kelvin, to: .fahrenheit)
+            cityCell?.lblTemp.text = convertTemp(temp: Double(cityList[indexPath.row].temp), from: .kelvin, to: .fahrenheit)
         }
-
         
-      //  cityCell?.lblTime.text = "\(Float(cityList[indexPath.row].timezone))"
         cityCell?.lblTime.text = createDateTime(timestamp:"\(Float(cityList[indexPath.row].timezone))")
-
-
         cityCell?.lblCityName.text = cityList[indexPath.row].cityName
         
         return cityCell!
     }
-     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             deleteData(cityName: cityList[indexPath.row].cityName!)
             cityList.remove(at: indexPath.row)

@@ -22,7 +22,7 @@
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="weatherCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="weatherCell" rowHeight="122" id="pGM-ay-1uc" customClass="WeatherInfoCell" customModule="WeatherApps" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="122"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pGM-ay-1uc" id="tp2-oO-x9n" customClass="wea">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pGM-ay-1uc" id="tp2-oO-x9n">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="122"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -82,6 +82,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OXF-y5-na7">
                                 <rect key="frame" x="379" y="822" width="25" height="30"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" constant="25" id="Zh0-X5-LPc"/>
                                     <constraint firstAttribute="height" constant="30" id="v58-tt-2fu"/>
                                 </constraints>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -92,29 +93,43 @@
                                     <action selector="btnAddCity:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Gv0-a8-K1N"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="scE-Px-F4Y">
-                                <rect key="frame" x="69" y="822" width="300" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MSI-iN-v1h">
-                                <rect key="frame" x="10" y="822" width="49" height="30"/>
-                                <state key="normal" title="°C /  °F"/>
-                                <connections>
-                                    <action selector="btnTempTypeToggle:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7e4-H1-ERg"/>
-                                </connections>
-                            </button>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t6l-Ld-938">
                                 <rect key="frame" x="0.0" y="54" width="414" height="44"/>
                                 <items>
                                     <navigationItem title="Weather App" id="jph-Os-MaU"/>
                                 </items>
                             </navigationBar>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XmV-sW-0cE">
+                                <rect key="frame" x="9" y="822" width="65.5" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AZL-nD-Y0C">
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                        <state key="normal" title="°C"/>
+                                        <connections>
+                                            <action selector="btnTempTypeCelcius:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PMQ-vp-pxx"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HLZ-uG-ENB">
+                                        <rect key="frame" x="30" y="0.0" width="5.5" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwl-A6-Uwr">
+                                        <rect key="frame" x="35.5" y="0.0" width="30" height="30"/>
+                                        <state key="normal" title="°F "/>
+                                        <connections>
+                                            <action selector="btnTempTypeFahrenheit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eS1-0r-Hbe"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="scE-Px-F4Y" firstAttribute="leading" secondItem="MSI-iN-v1h" secondAttribute="trailing" constant="10" id="0QS-Pi-Yix"/>
                             <constraint firstItem="t6l-Ld-938" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="2US-ms-mt9"/>
+                            <constraint firstItem="XmV-sW-0cE" firstAttribute="top" secondItem="35b-GM-wvw" secondAttribute="bottom" constant="10" id="9od-MS-hOe"/>
+                            <constraint firstItem="AZL-nD-Y0C" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="9" id="EJE-np-3Il"/>
                             <constraint firstAttribute="trailing" secondItem="35b-GM-wvw" secondAttribute="trailing" id="Gna-PQ-FtD"/>
                             <constraint firstItem="t6l-Ld-938" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Kyn-oM-L7o"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="OXF-y5-na7" secondAttribute="bottom" constant="10" id="QlO-37-rNH"/>
@@ -123,17 +138,14 @@
                             <constraint firstItem="t6l-Ld-938" firstAttribute="centerX" secondItem="35b-GM-wvw" secondAttribute="centerX" id="bgc-Bu-Yoe"/>
                             <constraint firstItem="OXF-y5-na7" firstAttribute="trailing" secondItem="35b-GM-wvw" secondAttribute="trailing" constant="-10" id="dvf-3p-3bx"/>
                             <constraint firstItem="35b-GM-wvw" firstAttribute="top" secondItem="t6l-Ld-938" secondAttribute="bottom" id="eBU-oG-lCC"/>
-                            <constraint firstItem="MSI-iN-v1h" firstAttribute="leading" secondItem="35b-GM-wvw" secondAttribute="leading" constant="10" id="kw7-CN-rWJ"/>
                             <constraint firstItem="35b-GM-wvw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="m5q-bg-Fpk"/>
-                            <constraint firstItem="MSI-iN-v1h" firstAttribute="top" secondItem="35b-GM-wvw" secondAttribute="bottom" constant="10" id="mZ3-SV-Oqz"/>
-                            <constraint firstItem="OXF-y5-na7" firstAttribute="leading" secondItem="scE-Px-F4Y" secondAttribute="trailing" constant="10" id="oDG-xq-PoQ"/>
-                            <constraint firstItem="scE-Px-F4Y" firstAttribute="top" secondItem="35b-GM-wvw" secondAttribute="bottom" constant="10" id="vru-uY-wV1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="btnTempTypeCelcius" destination="AZL-nD-Y0C" id="vYz-rh-a93"/>
+                        <outlet property="btnTempTypeFahrenheit" destination="gwl-A6-Uwr" id="Zjc-GB-TWg"/>
                         <outlet property="tableView" destination="35b-GM-wvw" id="5W7-1t-CQs"/>
-                        <outlet property="txtNewCityAdded" destination="scE-Px-F4Y" id="aXt-4W-Abn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -148,35 +160,44 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PsD-v3-r3Z">
-                                <rect key="frame" x="20" y="64" width="326" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter city name" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="PsD-v3-r3Z">
+                                <rect key="frame" x="20" y="98" width="326" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="13B-Lr-gpP">
-                                <rect key="frame" x="356" y="66" width="48" height="30"/>
+                                <rect key="frame" x="356" y="100" width="48" height="30"/>
                                 <state key="normal" title="Cancel"/>
                                 <connections>
                                     <action selector="btnCancel:" destination="Nsb-6s-Cqx" eventType="touchUpInside" id="VWA-g5-c48"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KcH-yJ-Ovc">
-                                <rect key="frame" x="20" y="115" width="37" height="30"/>
+                                <rect key="frame" x="20" y="149" width="37" height="30"/>
                                 <state key="normal" title="Done"/>
                                 <connections>
                                     <action selector="btnDone:" destination="Nsb-6s-Cqx" eventType="touchUpInside" id="Xfk-WU-ibF"/>
                                 </connections>
                             </button>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cr5-0C-B4y">
+                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                                <items>
+                                    <navigationItem title="Add New City" id="WDS-Rs-CUg"/>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="13B-Lr-gpP" firstAttribute="centerY" secondItem="PsD-v3-r3Z" secondAttribute="centerY" id="4GQ-r6-4tB"/>
+                            <constraint firstItem="VVR-xI-ZOy" firstAttribute="trailing" secondItem="cr5-0C-B4y" secondAttribute="trailing" id="Nd6-qA-LF4"/>
                             <constraint firstItem="13B-Lr-gpP" firstAttribute="leading" secondItem="PsD-v3-r3Z" secondAttribute="trailing" constant="10" id="U6n-A0-XWi"/>
+                            <constraint firstItem="cr5-0C-B4y" firstAttribute="leading" secondItem="VVR-xI-ZOy" secondAttribute="leading" id="Wgd-K8-hmG"/>
                             <constraint firstItem="VVR-xI-ZOy" firstAttribute="trailing" secondItem="13B-Lr-gpP" secondAttribute="trailing" constant="10" id="boK-FM-c8k"/>
-                            <constraint firstItem="PsD-v3-r3Z" firstAttribute="top" secondItem="VVR-xI-ZOy" secondAttribute="top" constant="20" id="erT-Mj-2G8"/>
+                            <constraint firstItem="cr5-0C-B4y" firstAttribute="top" secondItem="VVR-xI-ZOy" secondAttribute="top" id="lkA-EL-2Lg"/>
                             <constraint firstItem="PsD-v3-r3Z" firstAttribute="leading" secondItem="VVR-xI-ZOy" secondAttribute="leading" constant="20" id="oSh-In-LbC"/>
                             <constraint firstItem="KcH-yJ-Ovc" firstAttribute="leading" secondItem="PsD-v3-r3Z" secondAttribute="leading" id="q7r-hJ-RHW"/>
                             <constraint firstItem="KcH-yJ-Ovc" firstAttribute="top" secondItem="PsD-v3-r3Z" secondAttribute="bottom" constant="17" id="xaS-Yn-bfb"/>
+                            <constraint firstItem="PsD-v3-r3Z" firstAttribute="top" secondItem="cr5-0C-B4y" secondAttribute="bottom" constant="10" id="xpQ-d1-bFw"/>
                             <constraint firstItem="VVR-xI-ZOy" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="KcH-yJ-Ovc" secondAttribute="trailing" symbolic="YES" id="yZf-XV-ZC8"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="VVR-xI-ZOy"/>
