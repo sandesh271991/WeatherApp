@@ -11,7 +11,8 @@ import CoreData
 
 
 class ViewController: UIViewController, getCityDelegate {
-    
+
+    var tempTypeCelcius: Bool =  true  // true = °C and false = °F
     @IBOutlet weak var txtNewCityAdded: UITextField!
     var cityList = [AnyObject]()
     var newCityAdded: String?
@@ -35,11 +36,9 @@ class ViewController: UIViewController, getCityDelegate {
         super.viewDidLoad()
         self.retrieveData()
         
-        
-        var newCity = storyboard?.instantiateViewController(identifier: "NewCityVC") as! NewCityVC
-        
-        newCity.delegate = self
+      var date =  createDateTime(timestamp: "3600")
     }
+    
     //View LifeCycle
     override func viewWillAppear(_ animated: Bool) {
         
@@ -48,21 +47,54 @@ class ViewController: UIViewController, getCityDelegate {
     }
     
     @IBAction func btnAddCity(_ sender: Any) {
+
         
-        if let city  = txtNewCityAdded.text {
-            newCityAdded = city
-        }
+         let presentedViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewCityVC") as! NewCityVC
         
-        if cityList.contains(where: { ($0.cityName)?.caseInsensitiveCompare(newCityAdded!) == .orderedSame}) {
-            showAlert(title: "", message: "City Already added")
-        } else {
-            self.fetchData()
-        }
+            presentedViewController.delegate = self
+            presentedViewController.providesPresentationContextTransitionStyle = true
+            presentedViewController.definesPresentationContext = true
+            presentedViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
+            self.present(presentedViewController, animated: true, completion: nil)
+    
+
+             // self.presentModalViewController(myCamera, animated: true)
+        
+
     }
     
-    func getCity(cityName: String) {
-        newCityAdded = cityName
-        print("new city added \(newCityAdded)")
+    func getCity(cityName: String){
+             
+                    newCityAdded = cityName
+                
+        
+                if cityList.contains(where: { ($0.cityName)?.caseInsensitiveCompare(newCityAdded!) == .orderedSame}) {
+                     DispatchQueue.main.async {
+                        self.showAlert(title: "", message: "City Already added")
+                    }
+                } else {
+                    self.fetchData()
+                }
+    }
+
+    func backFromCamera() {
+         print("Back from camera")
+     }
+    
+    func createDateTime(timestamp: String) -> String {
+        var strDate = "undefined"
+            
+        if let unixTime = Double(timestamp) {
+            let date = Date(timeIntervalSince1970: unixTime)
+            let dateFormatter = DateFormatter()
+            let timezone = TimeZone.current.abbreviation() ?? "CET"  // get current TimeZone abbreviation or set to CET
+            dateFormatter.timeZone = TimeZone(abbreviation: timezone) //Set timezone that you want
+            dateFormatter.locale = NSLocale.current
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm" //Specify your format that you want
+            strDate = dateFormatter.string(from: date)
+        }
+            
+        return strDate
     }
     
     func updateView() {
@@ -94,6 +126,18 @@ class ViewController: UIViewController, getCityDelegate {
         }
     }
     
+    @IBAction func btnTempTypeToggle(_ sender: Any) {
+        tempTypeCelcius.toggle()
+        
+        if tempTypeCelcius {
+            
+        }
+        else{
+            
+        }
+        tableView.reloadData()
+    }
+
     func createData(){
         
         //As we know that container is set up in the AppDelegates so we need to refer that container.
@@ -106,14 +150,12 @@ class ViewController: UIViewController, getCityDelegate {
         let userEntity = NSEntityDescription.entity(forEntityName: "WeatherLocalData", in: managedContext)!
         
         //final, we need to add some data to our newly created record for each keys using
-        //here adding 5 data with loop
-        
         let user = NSManagedObject(entity: userEntity, insertInto: managedContext)
         user.setValue( weatherViewModel?.name , forKeyPath: "cityName")
         user.setValue(weatherViewModel?.temp.temp, forKeyPath: "temp")
-        
+        user.setValue(weatherViewModel?.time, forKeyPath: "timezone")
+
         //Now we have set all the values. The next step is to save them inside the Core Data
-        
         do {
             try managedContext.save()
             
@@ -214,10 +256,18 @@ extension ViewController:  UITableViewDataSource, UITableViewDelegate {
             cityCell = WeatherInfoCell.init(style: .default, reuseIdentifier: weatherCellId)
         }
         
-        cityCell?.lblTemp.text = "\(cityList[indexPath.row].temp ?? 0)"
+        if tempTypeCelcius {
+            cityCell?.lblTemp.text = convertTemp(temp: Double(cityList[indexPath.row].temp), from: .kelvin, to: .celsius)
+        }
+        else{
+             cityCell?.lblTemp.text = convertTemp(temp: Double(cityList[indexPath.row].temp), from: .kelvin, to: .fahrenheit)
+        }
+
         
-        //cityCell?.lblTime.text = "\(cityList[indexPath.row].timeZone ?? 0)"
-        
+      //  cityCell?.lblTime.text = "\(Float(cityList[indexPath.row].timezone))"
+        cityCell?.lblTime.text = createDateTime(timestamp:"\(Float(cityList[indexPath.row].timezone))")
+
+
         cityCell?.lblCityName.text = cityList[indexPath.row].cityName
         
         return cityCell!

@@ -16,18 +16,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="weatherInfoCell" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="35b-GM-wvw">
-                                <rect key="frame" x="10" y="54" width="394" height="748"/>
+                                <rect key="frame" x="0.0" y="98" width="414" height="714"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="weatherCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="weatherCell" rowHeight="122" id="pGM-ay-1uc" customClass="WeatherInfoCell" customModule="WeatherApps" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="394" height="122"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="122"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pGM-ay-1uc" id="tp2-oO-x9n" customClass="wea">
-                                            <rect key="frame" x="0.0" y="0.0" width="394" height="122"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="122"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bXK-HH-1AM">
-                                                    <rect key="frame" x="303" y="50.5" width="71" height="21"/>
+                                                    <rect key="frame" x="323" y="50.5" width="71" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="nhR-oL-v1z"/>
                                                     </constraints>
@@ -93,23 +93,41 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="scE-Px-F4Y">
-                                <rect key="frame" x="10" y="822" width="359" height="34"/>
+                                <rect key="frame" x="69" y="822" width="300" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MSI-iN-v1h">
+                                <rect key="frame" x="10" y="822" width="49" height="30"/>
+                                <state key="normal" title="°C /  °F"/>
+                                <connections>
+                                    <action selector="btnTempTypeToggle:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7e4-H1-ERg"/>
+                                </connections>
+                            </button>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t6l-Ld-938">
+                                <rect key="frame" x="0.0" y="54" width="414" height="44"/>
+                                <items>
+                                    <navigationItem title="Weather App" id="jph-Os-MaU"/>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="35b-GM-wvw" secondAttribute="trailing" constant="10" id="Gna-PQ-FtD"/>
+                            <constraint firstItem="scE-Px-F4Y" firstAttribute="leading" secondItem="MSI-iN-v1h" secondAttribute="trailing" constant="10" id="0QS-Pi-Yix"/>
+                            <constraint firstItem="t6l-Ld-938" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="2US-ms-mt9"/>
+                            <constraint firstAttribute="trailing" secondItem="35b-GM-wvw" secondAttribute="trailing" id="Gna-PQ-FtD"/>
+                            <constraint firstItem="t6l-Ld-938" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Kyn-oM-L7o"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="OXF-y5-na7" secondAttribute="bottom" constant="10" id="QlO-37-rNH"/>
-                            <constraint firstItem="scE-Px-F4Y" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="Tpe-6X-gq5"/>
-                            <constraint firstItem="OXF-y5-na7" firstAttribute="top" secondItem="35b-GM-wvw" secondAttribute="bottom" constant="20" id="YDH-WL-VoX"/>
+                            <constraint firstItem="OXF-y5-na7" firstAttribute="top" secondItem="35b-GM-wvw" secondAttribute="bottom" constant="10" id="YDH-WL-VoX"/>
                             <constraint firstItem="OXF-y5-na7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="aJt-tb-gnM"/>
-                            <constraint firstItem="OXF-y5-na7" firstAttribute="trailing" secondItem="35b-GM-wvw" secondAttribute="trailing" id="dvf-3p-3bx"/>
-                            <constraint firstItem="35b-GM-wvw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="m5q-bg-Fpk"/>
+                            <constraint firstItem="t6l-Ld-938" firstAttribute="centerX" secondItem="35b-GM-wvw" secondAttribute="centerX" id="bgc-Bu-Yoe"/>
+                            <constraint firstItem="OXF-y5-na7" firstAttribute="trailing" secondItem="35b-GM-wvw" secondAttribute="trailing" constant="-10" id="dvf-3p-3bx"/>
+                            <constraint firstItem="35b-GM-wvw" firstAttribute="top" secondItem="t6l-Ld-938" secondAttribute="bottom" id="eBU-oG-lCC"/>
+                            <constraint firstItem="MSI-iN-v1h" firstAttribute="leading" secondItem="35b-GM-wvw" secondAttribute="leading" constant="10" id="kw7-CN-rWJ"/>
+                            <constraint firstItem="35b-GM-wvw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="m5q-bg-Fpk"/>
+                            <constraint firstItem="MSI-iN-v1h" firstAttribute="top" secondItem="35b-GM-wvw" secondAttribute="bottom" constant="10" id="mZ3-SV-Oqz"/>
                             <constraint firstItem="OXF-y5-na7" firstAttribute="leading" secondItem="scE-Px-F4Y" secondAttribute="trailing" constant="10" id="oDG-xq-PoQ"/>
-                            <constraint firstItem="35b-GM-wvw" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="uPr-OB-Rpw"/>
-                            <constraint firstItem="scE-Px-F4Y" firstAttribute="top" secondItem="35b-GM-wvw" secondAttribute="bottom" constant="20" id="vru-uY-wV1"/>
+                            <constraint firstItem="scE-Px-F4Y" firstAttribute="top" secondItem="35b-GM-wvw" secondAttribute="bottom" constant="10" id="vru-uY-wV1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
