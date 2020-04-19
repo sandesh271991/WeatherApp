@@ -18,20 +18,9 @@ import Foundation
 // MARK: - Welcome
 struct WeatherData: Codable {
     let coord: Coord
-    let base: String
     let main: Main
-    let visibility: Int
-    let clouds: Clouds
-    let dt: Int
-    let sys: Sys
-    let timezone, id: Int
+    let timezone: Int
     let name: String
-    let cod: Int
-}
-
-// MARK: - Clouds
-struct Clouds: Codable {
-    let all: Int
 }
 
 // MARK: - Coord
@@ -46,12 +35,5 @@ struct Main: Codable {
     enum CodingKeys: String, CodingKey {
         case temp
     }
-}
-
-// MARK: - Sys
-struct Sys: Codable {
-    let type, id: Int
-    let country: String
-    let sunrise, sunset: Int
 }
 

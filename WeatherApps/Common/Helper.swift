@@ -24,7 +24,7 @@ extension UIViewController {
     }
 }
 
-
+// to convert temp 
 let mf = MeasurementFormatter()
 func convertTemp(temp: Double, from inputTempType: UnitTemperature, to outputTempType: UnitTemperature) -> String {
     mf.numberFormatter.maximumFractionDigits = 0

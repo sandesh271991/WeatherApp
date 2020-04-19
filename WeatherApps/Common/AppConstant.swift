@@ -9,6 +9,7 @@
 import Foundation
 
 let weatherCellId = "weatherCell"
+let WeatherLocalDataEntity = "WeatherLocalData"
 
 var appid = "66c3fd0cb6de2383542585703136321a"
 let webserviceURL = "http://api.openweathermap.org/data/2.5/weather?"

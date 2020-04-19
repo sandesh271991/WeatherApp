@@ -12,13 +12,15 @@ import CoreData
 
 class ViewController: UIViewController, getCityDelegate {
     
-    var tempTypeCelcius: Bool =  true  // true = °C and false = °F
     @IBOutlet weak var txtNewCityAdded: UITextField!
     @IBOutlet weak var lblTempType: UIButton!
     
     @IBOutlet weak var btnTempTypeCelcius: UIButton!
-    
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var btnTempTypeFahrenheit: UIButton!
+    
+    var tempTypeCelcius: Bool =  true  // true = °C and false = °F
+    
     var cityList = [AnyObject]()
     var newCityAdded: String?
     var weatherViewModel: WeatherViewModel?
@@ -34,9 +36,7 @@ class ViewController: UIViewController, getCityDelegate {
         }
     }
     
-    @IBOutlet weak var tableView: UITableView!
-    
-    
+    //View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         btnTempTypeCelcius.setTitleColor(.blue, for: .normal)
@@ -44,7 +44,6 @@ class ViewController: UIViewController, getCityDelegate {
         self.retrieveData()
     }
     
-    //View LifeCycle
     override func viewWillAppear(_ animated: Bool) {
         
         tableView?.rowHeight = UITableView.automaticDimension
@@ -62,6 +61,7 @@ class ViewController: UIViewController, getCityDelegate {
         self.present(presentedViewController, animated: true, completion: nil)
     }
     
+    //to get weather data from  API
     func getCity(cityName: String){
         
         newCityAdded = cityName
@@ -74,23 +74,8 @@ class ViewController: UIViewController, getCityDelegate {
             self.fetchData()
         }
     }
-    
-    func createDateTime(timestamp: String) -> String {
-        var strDate = "undefined"
-        
-        if let unixTime = Double(timestamp) {
-            let date = Date(timeIntervalSince1970: unixTime)
-            let dateFormatter = DateFormatter()
-            let timezone = TimeZone.current.abbreviation() ?? "CET"  // get current TimeZone abbreviation or set to CET
-            dateFormatter.timeZone = TimeZone(abbreviation: timezone) //Set timezone that you want
-            dateFormatter.locale = NSLocale.current
-            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm" //Specify your format that you want
-            strDate = dateFormatter.string(from: date)
-        }
-        
-        return strDate
-    }
-    
+
+    // To update view on data change
     func updateView() {
         self.cityList = [AnyObject]()
         
@@ -135,6 +120,24 @@ class ViewController: UIViewController, getCityDelegate {
     }
     
     
+    func createDateTime(timestamp: String) -> String {
+        var strDate = "undefined"
+        
+        if let unixTime = Double(timestamp) {
+            let date = Date(timeIntervalSince1970: unixTime)
+            let dateFormatter = DateFormatter()
+            let timezone = TimeZone.current.abbreviation() ?? "CET"  // get current TimeZone abbreviation or set to CET
+            dateFormatter.timeZone = TimeZone(abbreviation: timezone) //Set timezone that you want
+            dateFormatter.locale = NSLocale.current
+            dateFormatter.dateFormat = "dd.MM.yyyy HH:mm" //Specify your format that you want
+            strDate = dateFormatter.string(from: date)
+        }
+        
+        return strDate
+    }
+    
+    
+    //CORE DATA CRUD
     func createData(){
         
         //As we know that container is set up in the AppDelegates so we need to refer that container.
@@ -144,7 +147,7 @@ class ViewController: UIViewController, getCityDelegate {
         let managedContext = appDelegate.persistentContainer.viewContext
         
         //Now let’s create an entity and new user records.
-        let userEntity = NSEntityDescription.entity(forEntityName: "WeatherLocalData", in: managedContext)!
+        let userEntity = NSEntityDescription.entity(forEntityName: WeatherLocalDataEntity, in: managedContext)!
         
         //final, we need to add some data to our newly created record for each keys using
         let user = NSManagedObject(entity: userEntity, insertInto: managedContext)
@@ -162,7 +165,6 @@ class ViewController: UIViewController, getCityDelegate {
     }
     
     
-    
     func retrieveData() {
         
         //As we know that container is set up in the AppDelegates so we need to refer that container.
@@ -172,7 +174,7 @@ class ViewController: UIViewController, getCityDelegate {
         let managedContext = appDelegate.persistentContainer.viewContext
         
         //Prepare the request of type NSFetchRequest  for the entity
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "WeatherLocalData")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: WeatherLocalDataEntity)
         
         do {
             let result = try managedContext.fetch(fetchRequest)
@@ -194,7 +196,7 @@ class ViewController: UIViewController, getCityDelegate {
         //We need to create a context from this container
         let managedContext = appDelegate.persistentContainer.viewContext
         
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "WeatherLocalData")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: WeatherLocalDataEntity)
         fetchRequest.predicate = NSPredicate(format: "cityName = %@", cityName )
         
         do
@@ -215,60 +217,6 @@ class ViewController: UIViewController, getCityDelegate {
         catch
         {
             print(error)
-        }
-    }
-}
-
-
-extension ViewController:  UITableViewDataSource, UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.size.width, height: 5))
-        footerView.backgroundColor = UIColor.black
-        return footerView
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cityList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        var cityCell: WeatherInfoCell? = tableView.dequeueReusableCell(withIdentifier: weatherCellId, for: indexPath) as? WeatherInfoCell
-        
-        if cityCell == nil {
-            cityCell = WeatherInfoCell.init(style: .default, reuseIdentifier: weatherCellId)
-        }
-        
-        if tempTypeCelcius {
-            cityCell?.lblTemp.text = convertTemp(temp: Double(cityList[indexPath.row].temp), from: .kelvin, to: .celsius)
-        }
-        else{
-            cityCell?.lblTemp.text = convertTemp(temp: Double(cityList[indexPath.row].temp), from: .kelvin, to: .fahrenheit)
-        }
-        
-        cityCell?.lblTime.text = createDateTime(timestamp:"\(Float(cityList[indexPath.row].timezone))")
-        cityCell?.lblCityName.text = cityList[indexPath.row].cityName
-        
-        return cityCell!
-    }
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            deleteData(cityName: cityList[indexPath.row].cityName!)
-            cityList.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
 }
